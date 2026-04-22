@@ -150,8 +150,8 @@
             center,
             doc_type: docType,
             notes: notes || null,
-            files: JSON.stringify(staged),
-            submitted_at: new Date().toISOString(),
+            files: staged,
+            submitted_at: Date.now(),
           };
           await insertSubmission(row);
           setStaged([]); setDocType(""); setNotes(""); setDone(true);
