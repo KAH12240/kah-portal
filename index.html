@@ -54,6 +54,14 @@
       return res.json();
     }
 
+    async function deleteSubmission(id) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${id}`, {
+        method: "DELETE",
+        headers: hdrs,
+      });
+      if (!res.ok) throw new Error("Failed to delete submission");
+    }
+
     async function insertSubmission(row) {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: "POST",
@@ -262,11 +270,28 @@
         return acc;
       }, {});
 
-      const getDt = (id) => DOC_TYPES.find(d => d.id === id) || { label: id, icon: "📄", color: "#888" };
+      const [confirmDelete, setConfirmDelete] = useState(null); // holds submission id to confirm
+
+      const handleDelete = async (id) => {
+        try {
+          await deleteSubmission(id);
+          setSubmissions(prev => prev.filter(s => s.id !== id));
+          setConfirmDelete(null);
+          showToast("Submission deleted.");
+        } catch(e) {
+          showToast("Delete failed: " + e.message, true);
+        }
+      };
 
       const downloadAll = (sub) => {
         if (!sub.files || sub.files.length === 0) { showToast("No downloadable files.", true); return; }
-        sub.files.forEach(dlFile);
+        sub.files.forEach(f => {
+          const a = document.createElement("a");
+          a.href = f.dataUrl || f.url || f;
+          a.download = f.name || "file";
+          a.target = "_blank";
+          a.click();
+        });
         showToast("Downloading " + sub.files.length + " file(s)");
       };
 
@@ -364,11 +389,22 @@
                           ) : (
                             <p style={{fontSize:12, color:"#aaa", margin:"4px 0 10px"}}>No files attached.</p>
                           )}
+                          <div style={{display:"flex", gap:8, marginTop:8, flexWrap:"wrap"}}>
                           {sub.files && sub.files.length > 0 && (
                             <button style={S.downloadBtn} onClick={() => downloadAll(sub)}>
                               ⬇ Download All ({sub.files.length})
                             </button>
                           )}
+                          {confirmDelete === sub.id ? (
+                            <div style={S.confirmRow}>
+                              <span style={{fontSize:13, color:"#c0392b", fontWeight:600}}>Delete this submission?</span>
+                              <button style={S.confirmYes} onClick={() => handleDelete(sub.id)}>Yes, delete</button>
+                              <button style={S.confirmNo} onClick={() => setConfirmDelete(null)}>Cancel</button>
+                            </div>
+                          ) : (
+                            <button style={S.deleteBtn} onClick={() => setConfirmDelete(sub.id)}>🗑 Delete</button>
+                          )}
+                          </div>
                         </div>
                       );
                     })}
@@ -531,6 +567,10 @@
       fileListAdmin:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:12},
       adminFileChip:{fontSize:12,background:"#f6f8f6",border:"1px solid #dde8dd",borderRadius:6,padding:"4px 10px",color:"#333"},
       downloadBtn:{background:"#1D3557",color:"#fff",border:"none",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"},
+      deleteBtn:{background:"#fff",color:"#c0392b",border:"1.5px solid #c0392b",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer",marginLeft:8},
+      confirmRow:{display:"flex",alignItems:"center",gap:10,marginTop:8,flexWrap:"wrap"},
+      confirmYes:{background:"#c0392b",color:"#fff",border:"none",borderRadius:8,padding:"7px 14px",fontSize:12,fontWeight:700,cursor:"pointer"},
+      confirmNo:{background:"#eee",color:"#333",border:"none",borderRadius:8,padding:"7px 14px",fontSize:12,fontWeight:700,cursor:"pointer"},
       emptyState:{textAlign:"center",padding:"60px 20px",display:"flex",flexDirection:"column",alignItems:"center",gap:14},
       toast:{position:"fixed",bottom:24,right:24,color:"#fff",padding:"13px 22px",borderRadius:10,fontWeight:600,fontSize:14,boxShadow:"0 4px 20px rgba(0,0,0,.18)",zIndex:999},
     };
