@@ -99,10 +99,11 @@
     }
 
     function Header({ role, onSwitch }) {
+      const logoUrl = "https://kah12240.github.io/kah-fleet/kah-logo.png";
       return (
         <div style={S.header}>
           <div style={S.headerLeft}>
-            <img src="https://kah12240.github.io/kah-fleet/kah-logo.png" alt="KAH" style={{height:46, objectFit:"contain"}} />
+            <img src={logoUrl} alt="KAH" style={{height:46, objectFit:"contain"}} />
             <div>
               <div style={S.headerTitle}>Maryland Childcare Licensing Portal</div>
               <div style={S.headerRole}>{role === "director" ? "Director Submission View" : "Admin / Owner View"}</div>
