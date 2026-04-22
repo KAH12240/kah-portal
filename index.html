@@ -4,30 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KAH Licensing Document Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: #f6f8f6; }
-    button { font-family: 'DM Sans', sans-serif; }
-    select, textarea { font-family: 'DM Sans', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #f6f8f6; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useRef, useEffect } = React;
-    const { createClient } = supabase;
 
     const SUPABASE_URL = "https://tjvzvwbtmilknguywdse.supabase.co";
     const SUPABASE_KEY = "sb_publishable_6gAsF5-FGs3SiEx-V2WL6Q_nenqNO5q";
-    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-    const BUCKET = "kah-documents";
-
-    const KAH_LOGO = "data:image/png;base64,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";
+    const TABLE = "submissions";
+    const ADMIN_PASSWORD = "KAH12345";
 
     const CENTERS = [
       "KAH @ Barnsley Elementary","KAH @ Bayard Rustin Elementary","KAH @ Burtonsville Elementary",
@@ -43,340 +36,505 @@
     ];
 
     const DOC_TYPES = [
-      { id: "staffing",     label: "Staffing Patterns",     icon: "📊", color: "#2D6A4F" },
-      { id: "personnel",   label: "Personnel List",          icon: "👥", color: "#1D3557" },
-      { id: "development", label: "Staff Development Plan", icon: "📈", color: "#6B4226" },
-      { id: "orientation", label: "Staff Orientations",     icon: "🎓", color: "#7B2D8B" },
+      { id:"staffing",    label:"Staffing Patterns",     icon:"📊", color:"#2D6A4F" },
+      { id:"personnel",  label:"Personnel List",         icon:"👥", color:"#1D3557" },
+      { id:"development",label:"Staff Development Plan", icon:"📈", color:"#6B4226" },
+      { id:"orientation",label:"Orientation",            icon:"📋", color:"#7B2D8B" },
     ];
 
-    const ROLES = [
-      { id: "director", label: "Center Director" },
-      { id: "admin",    label: "Admin / Owner"   },
-    ];
+    const hdrs = {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+    };
+
+    async function fetchSubmissions() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?select=*&order=submitted_at.desc`, { headers: hdrs });
+      if (!res.ok) throw new Error("Failed to load submissions");
+      return res.json();
+    }
+
+    async function insertSubmission(row) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
+        method: "POST",
+        headers: { ...hdrs, "Prefer": "return=representation" },
+        body: JSON.stringify(row),
+      });
+      if (!res.ok) throw new Error("Failed to save submission");
+      return res.json();
+    }
 
     function fmtSize(b) {
+      if (!b) return "";
       if (b < 1024) return b + " B";
       if (b < 1048576) return (b/1024).toFixed(1) + " KB";
       return (b/1048576).toFixed(1) + " MB";
     }
+
     function fmtDate(ts) {
-      return new Date(ts).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
+      if (!ts) return "";
+      return new Date(ts).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"});
     }
 
-    function App() {
-      const [role, setRole] = useState(null);
-      const [center, setCenter] = useState("");
-      const [subs, setSubs] = useState([]);
-      const [files, setFiles] = useState({});
-      const [docType, setDocType] = useState("");
-      const [notes, setNotes] = useState("");
-      const [submitted, setSubmitted] = useState(false);
+    function readFileAsDataUrl(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload  = () => res({ name:file.name, size:file.size, type:file.type, dataUrl:r.result });
+        r.onerror = () => rej(new Error("Failed to read " + file.name));
+        r.readAsDataURL(file);
+      });
+    }
+
+    function dlFile(f) {
+      const a = document.createElement("a");
+      a.href = f.dataUrl; a.download = f.name; a.click();
+    }
+
+    function Toast({ toast }) {
+      return (
+        <div style={{...S.toast, background: toast.err ? "#c0392b" : "#2D6A4F"}}>
+          {toast.err ? "⚠️" : "✅"} {toast.msg}
+        </div>
+      );
+    }
+
+    function Header({ role, onSwitch }) {
+      return (
+        <div style={S.header}>
+          <div style={S.headerLeft}>
+            <span style={{fontSize:34}}>🌿</span>
+            <div>
+              <div style={S.headerTitle}>Maryland Childcare Licensing Portal</div>
+              <div style={S.headerRole}>{role === "director" ? "Director Submission View" : "Admin / Owner View"}</div>
+            </div>
+          </div>
+          <button style={S.switchBtn} onClick={onSwitch}>Switch Role ↩</button>
+        </div>
+      );
+    }
+
+    function DirectorView({ showToast }) {
+      const [center,   setCenter]   = useState("");
+      const [docType,  setDocType]  = useState("");
+      const [notes,    setNotes]    = useState("");
+      const [staged,   setStaged]   = useState([]);
       const [dragOver, setDragOver] = useState(false);
-      const [fCenter, setFCenter] = useState("all");
-      const [fType, setFType] = useState("all");
-      const [toast, setToast] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [uploading, setUploading] = useState(false);
+      const [loading,  setLoading]  = useState(false);
+      const [saving,   setSaving]   = useState(false);
+      const [done,     setDone]     = useState(false);
       const fileRef = useRef();
 
-      const toast_ = (msg, type="success") => { setToast({msg,type}); setTimeout(()=>setToast(null),4000); };
-
-      useEffect(() => { loadSubs(); }, []);
-
-      async function loadSubs() {
+      const handleFiles = async (files) => {
         setLoading(true);
         try {
-          const { data, error } = await sb.from("submissions").select("*").order("submitted_at",{ascending:false});
-          if (error) throw error;
-          setSubs(data||[]);
-        } catch(e) { toast_("Could not load: "+(e.message||e),"error"); setSubs([]); }
+          const converted = await Promise.all(Array.from(files).map(readFileAsDataUrl));
+          setStaged(prev => {
+            const names = new Set(prev.map(f => f.name));
+            return [...prev, ...converted.filter(f => !names.has(f.name))];
+          });
+        } catch(e) { showToast("Error reading file: " + e.message, true); }
         setLoading(false);
-      }
-
-      const addFiles = (fl) => {
-        const n={};
-        Array.from(fl).forEach(f=>{n[f.name]=f;});
-        setFiles(prev=>({...prev,...n}));
       };
 
       const handleSubmit = async () => {
-        if (!center||!docType||Object.keys(files).length===0) { toast_("Please fill in all fields and attach at least one file.","error"); return; }
-        setUploading(true);
-        const id = `sub_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
-        const recs=[];
+        if (!center || !docType || staged.length === 0) {
+          showToast("Please fill in all fields and attach at least one file.", true);
+          return;
+        }
+        setSaving(true);
         try {
-          for (const [name,file] of Object.entries(files)) {
-            const safe=name.replace(/[^a-zA-Z0-9._-]/g,"_");
-            const path=`${id}/${safe}`;
-            const {error:ue}=await sb.storage.from(BUCKET).upload(path,file,{upsert:true});
-            if(ue) throw ue;
-            const {data:ud}=sb.storage.from(BUCKET).getPublicUrl(path);
-            recs.push({name,size:file.size,path,url:ud.publicUrl});
-          }
-          const rec={id,center,doc_type:docType,notes,submitted_at:Date.now(),files:recs};
-          const {error:de}=await sb.from("submissions").insert([rec]);
-          if(de) throw de;
-          setSubs(prev=>[rec,...prev]);
-          setSubmitted(true); setFiles({}); setDocType(""); setNotes("");
-          toast_(`${recs.length} file(s) uploaded and saved permanently!`);
-        } catch(e) { toast_("Upload failed: "+(e.message||e),"error"); }
-        setUploading(false);
+          const id = "sub_" + Date.now() + "_" + Math.random().toString(36).slice(2,6);
+          const row = {
+            id,
+            center,
+            doc_type: docType,
+            notes: notes || null,
+            files: JSON.stringify(staged),
+            submitted_at: new Date().toISOString(),
+          };
+          await insertSubmission(row);
+          setStaged([]); setDocType(""); setNotes(""); setDone(true);
+          showToast("Documents submitted successfully!");
+        } catch(e) {
+          showToast("Save failed: " + e.message, true);
+        }
+        setSaving(false);
       };
 
-      const dlFile = (f) => {
-        if (!f.url) { toast_("No URL available.","error"); return; }
-        const a=document.createElement("a"); a.href=f.url; a.download=f.name; a.target="_blank";
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      };
-
-      const dlAll = async (sub) => {
-        toast_(`Downloading ${sub.files.length} file(s)…`);
-        for (const f of sub.files) { dlFile(f); await new Promise(r=>setTimeout(r,400)); }
-      };
-
-      const delSub = async (id) => {
-        if (!window.confirm("Delete this submission and all its files? This cannot be undone.")) return;
-        try {
-          const sub=subs.find(s=>s.id===id);
-          if (sub&&sub.files&&sub.files.length) await sb.storage.from(BUCKET).remove(sub.files.map(f=>f.path));
-          const {error}=await sb.from("submissions").delete().eq("id",id);
-          if(error) throw error;
-          setSubs(prev=>prev.filter(s=>s.id!==id)); toast_("Submission deleted.");
-        } catch(e) { toast_("Delete failed: "+e.message,"error"); }
-      };
-
-      const filtered = subs.filter(s=>{
-        if(fCenter!=="all"&&s.center!==fCenter) return false;
-        if(fType!=="all"&&s.doc_type!==fType) return false;
-        return true;
-      });
-      const grouped = CENTERS.reduce((acc,c)=>{
-        const s=filtered.filter(x=>x.center===c); if(s.length) acc[c]=s; return acc;
-      },{});
-
-      const T = {
-        loginBg:{minHeight:"100vh",background:"linear-gradient(135deg,#e8f5e9,#e3f0fb)",display:"flex",alignItems:"center",justifyContent:"center"},
-        loginCard:{background:"#fff",borderRadius:20,padding:"48px 44px",boxShadow:"0 8px 48px rgba(0,0,0,.10)",maxWidth:420,width:"100%",textAlign:"center"},
-        logoRow:{display:"flex",alignItems:"center",gap:14,marginBottom:20,justifyContent:"center"},
-        logoTitle:{fontSize:20,fontWeight:800,color:"#1a3a2a",fontFamily:"'Playfair Display',serif",textAlign:"left"},
-        logoSub:{fontSize:12,color:"#5a7a6a",textAlign:"left",letterSpacing:0.5},
-        loginDesc:{color:"#555",marginBottom:28,fontSize:15},
-        roleGrid:{display:"flex",gap:14,justifyContent:"center"},
-        roleBtn:{flex:1,background:"#f4f9f6",border:"2px solid #c8e6c9",borderRadius:14,padding:"20px 14px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:10},
-        roleBtnIcon:{fontSize:32},
-        roleBtnLabel:{fontSize:13,fontWeight:700,color:"#2D6A4F"},
-        appBg:{minHeight:"100vh",background:"#f6f8f6"},
-        hdr:{background:"#fff",borderBottom:"1px solid #e0ebe4",padding:"16px 32px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100},
-        hdrL:{display:"flex",alignItems:"center",gap:12},
-        hdrTitle:{fontSize:16,fontWeight:800,color:"#1a3a2a",fontFamily:"'Playfair Display',serif"},
-        hdrRole:{fontSize:11,color:"#5a7a6a",letterSpacing:0.5},
-        switchBtn:{fontSize:12,background:"#eef6ee",border:"1px solid #b2d8b2",borderRadius:8,padding:"7px 14px",cursor:"pointer",color:"#2D6A4F",fontWeight:600},
-        wrap:{maxWidth:860,margin:"0 auto",padding:"36px 20px"},
-        card:{background:"#fff",borderRadius:18,padding:36,boxShadow:"0 2px 20px rgba(0,0,0,.06)"},
-        cardTitle:{fontSize:22,fontWeight:800,color:"#1a3a2a",marginBottom:24,fontFamily:"'Playfair Display',serif"},
-        lbl:{display:"block",fontSize:12,fontWeight:700,color:"#3a5a4a",marginBottom:6,marginTop:18,textTransform:"uppercase",letterSpacing:0.8},
-        sel:{width:"100%",padding:"10px 14px",border:"1.5px solid #d0e8d8",borderRadius:10,fontSize:14,color:"#222",background:"#fafffe",outline:"none"},
-        dtGrid:{display:"flex",gap:12,marginTop:4,flexWrap:"wrap"},
-        dtBtn:{flexBasis:"calc(50% - 6px)",flexGrow:1,display:"flex",flexDirection:"column",alignItems:"center",gap:8,border:"2px solid #e0e8e4",borderRadius:12,padding:"14px 8px",cursor:"pointer",background:"#fff"},
-        dz:{marginTop:4,border:"2px dashed #b2d8b2",borderRadius:14,padding:"32px 20px",textAlign:"center",cursor:"pointer",background:"#f6fdf7"},
-        dzA:{borderColor:"#2D6A4F",background:"#e8f5ee"},
-        dzTxt:{margin:"8px 0 4px",color:"#444",fontSize:14},
-        dzHint:{color:"#888",fontSize:12,margin:0},
-        browse:{color:"#2D6A4F",fontWeight:700,textDecoration:"underline"},
-        fList:{marginTop:10,display:"flex",flexDirection:"column",gap:6},
-        fChip:{display:"flex",alignItems:"center",gap:8,background:"#f0faf2",border:"1px solid #b2d8b2",borderRadius:8,padding:"7px 12px",fontSize:13},
-        fSz:{color:"#888",fontSize:11,marginLeft:6},
-        rmFile:{background:"none",border:"none",color:"#c0392b",cursor:"pointer",fontSize:14,marginLeft:"auto"},
-        ta:{width:"100%",border:"1.5px solid #d0e8d8",borderRadius:10,padding:"10px 14px",fontSize:14,color:"#333",resize:"vertical",background:"#fafffe",boxSizing:"border-box"},
-        subBtn:{marginTop:28,width:"100%",background:"#2D6A4F",color:"#fff",border:"none",borderRadius:12,padding:"15px 0",fontSize:16,fontWeight:800,cursor:"pointer",letterSpacing:0.5},
-        banner:{background:"#e8f5ee",border:"1px solid #b2d8b2",borderRadius:10,padding:"12px 18px",marginBottom:20,color:"#2D6A4F",fontWeight:600,fontSize:14,display:"flex",alignItems:"center",justifyContent:"space-between"},
-        dismissBtn:{background:"none",border:"none",color:"#2D6A4F",cursor:"pointer",fontSize:12,fontWeight:600},
-        adminTop:{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,flexWrap:"wrap",gap:14},
-        adminTitle:{fontSize:24,fontWeight:800,color:"#1a3a2a",fontFamily:"'Playfair Display',serif",margin:0},
-        adminSub:{color:"#5a7a6a",fontSize:13,marginTop:4},
-        fRow:{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center"},
-        fSel:{padding:"8px 12px",border:"1.5px solid #d0e8d8",borderRadius:8,fontSize:13,background:"#fff",color:"#333"},
-        refBtn:{padding:"8px 14px",border:"1.5px solid #d0e8d8",borderRadius:8,fontSize:13,background:"#fff",cursor:"pointer",color:"#2D6A4F",fontWeight:600},
-        cGroup:{background:"#fff",borderRadius:16,marginBottom:20,boxShadow:"0 2px 12px rgba(0,0,0,.05)",overflow:"hidden"},
-        cHdr:{display:"flex",alignItems:"center",gap:10,padding:"16px 22px",background:"#f0faf2",borderBottom:"1px solid #dff0e4"},
-        cIcon:{fontSize:20},
-        cName:{fontWeight:800,color:"#1a3a2a",fontSize:15,fontFamily:"'Playfair Display',serif",flex:1},
-        cCount:{fontSize:11,color:"#5a7a6a",background:"#d4edda",borderRadius:20,padding:"3px 10px",fontWeight:700},
-        sRow:{padding:"18px 22px",borderBottom:"1px solid #f0f4f0"},
-        badge:{display:"inline-flex",alignItems:"center",gap:6,borderRadius:20,padding:"4px 12px",fontSize:12,fontWeight:700},
-        meta:{display:"flex",gap:14,flexWrap:"wrap",marginBottom:10},
-        metaDate:{fontSize:12,color:"#777"},
-        metaNotes:{fontSize:12,color:"#444",fontStyle:"italic"},
-        fileRow:{display:"flex",flexWrap:"wrap",gap:8,marginBottom:12},
-        fileBtn:{fontSize:12,background:"#f0faf2",border:"1.5px solid #b2d8b2",borderRadius:8,padding:"6px 12px",color:"#2D6A4F",cursor:"pointer",fontWeight:600},
-        dlBtn:{background:"#1D3557",color:"#fff",border:"none",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"},
-        delBtn:{background:"#fff0f0",border:"1px solid #f5c6c6",borderRadius:8,padding:"5px 12px",fontSize:12,color:"#c0392b",cursor:"pointer",fontWeight:600},
-        empty:{textAlign:"center",padding:"60px 20px",display:"flex",flexDirection:"column",alignItems:"center",gap:14},
-        toast_:{position:"fixed",bottom:24,right:24,color:"#fff",padding:"13px 22px",borderRadius:10,fontWeight:600,fontSize:14,boxShadow:"0 4px 20px rgba(0,0,0,.18)",zIndex:999,maxWidth:360},
-      };
-
-      const Hdr = ({roleLabel,onSwitch}) => (
-        <div style={T.hdr}>
-          <div style={T.hdrL}>
-            <img src={KAH_LOGO} alt="KAH" style={{height:48,objectFit:"contain"}} />
-            <div>
-              <div style={T.hdrTitle}>Kids After Hours</div>
-              <div style={T.hdrRole}>{roleLabel}</div>
+      return (
+        <div style={S.container}>
+          {done && (
+            <div style={S.successBanner}>
+              ✅ Submission received! You may submit additional documents below.
+              <button style={S.dismissBtn} onClick={() => setDone(false)}>Dismiss</button>
             </div>
-          </div>
-          <button style={T.switchBtn} onClick={onSwitch}>Switch Role ↩</button>
-        </div>
-      );
+          )}
+          <div style={S.card}>
+            <h2 style={S.cardTitle}>Submit Licensing Documents</h2>
 
-      if (!role) return (
-        <div style={T.loginBg}>
-          <div style={T.loginCard}>
-            <div style={T.logoRow}>
-              <img src={KAH_LOGO} alt="KAH" style={{height:72,objectFit:"contain"}} />
-              <div>
-                <div style={T.logoTitle}>Kids After Hours</div>
-                <div style={T.logoSub}>Licensing Document Portal</div>
-              </div>
-            </div>
-            <p style={T.loginDesc}>Select your role to continue</p>
-            <div style={T.roleGrid}>
-              {ROLES.map(r=>(
-                <button key={r.id} style={T.roleBtn} onClick={()=>setRole(r.id)}>
-                  <span style={T.roleBtnIcon}>{r.id==="director"?"🏫":"🗂️"}</span>
-                  <span style={T.roleBtnLabel}>{r.label}</span>
+            <label style={S.label}>Your Center *</label>
+            <select style={S.select} value={center} onChange={e => setCenter(e.target.value)}>
+              <option value="">— Select your center —</option>
+              {CENTERS.map(c => <option key={c}>{c}</option>)}
+            </select>
+
+            <label style={S.label}>Document Type *</label>
+            <div style={S.docTypeGrid}>
+              {DOC_TYPES.map(dt => (
+                <button key={dt.id}
+                  style={{...S.docTypeBtn, ...(docType===dt.id ? {borderColor:dt.color, background:dt.color+"12"} : {})}}
+                  onClick={() => setDocType(dt.id)}>
+                  <span style={{fontSize:22}}>{dt.icon}</span>
+                  <span style={{fontSize:12, color:docType===dt.id?dt.color:"#444", fontWeight:docType===dt.id?700:500, textAlign:"center", lineHeight:1.3}}>{dt.label}</span>
                 </button>
               ))}
             </div>
-          </div>
-          {toast&&<div style={{...T.toast_,background:toast.type==="error"?"#c0392b":"#2D6A4F"}}>{toast.type==="error"?"⚠️ ":"✅ "}{toast.msg}</div>}
-        </div>
-      );
 
-      if (role==="director") return (
-        <div style={T.appBg}>
-          <Hdr roleLabel="Director Submission View" onSwitch={()=>{setRole(null);setSubmitted(false);setCenter("");}} />
-          <div style={T.wrap}>
-            {submitted&&<div style={T.banner}>✅ Files uploaded and saved to Supabase — admins can see them now!<button style={T.dismissBtn} onClick={()=>setSubmitted(false)}>Dismiss</button></div>}
-            <div style={T.card}>
-              <h2 style={T.cardTitle}>Submit Licensing Documents</h2>
-              <label style={T.lbl}>Your Center *</label>
-              <select style={T.sel} value={center} onChange={e=>setCenter(e.target.value)}>
-                <option value="">— Select your center —</option>
-                {CENTERS.map(c=><option key={c}>{c}</option>)}
-              </select>
-              <label style={T.lbl}>Document Type *</label>
-              <div style={T.dtGrid}>
-                {DOC_TYPES.map(dt=>(
-                  <button key={dt.id} style={{...T.dtBtn,...(docType===dt.id?{borderColor:dt.color,background:dt.color+"12"}:{})}} onClick={()=>setDocType(dt.id)}>
-                    <span style={{fontSize:22}}>{dt.icon}</span>
-                    <span style={{fontSize:12,color:docType===dt.id?dt.color:"#444",fontWeight:docType===dt.id?700:500,textAlign:"center",lineHeight:1.3}}>{dt.label}</span>
-                  </button>
+            <label style={S.label}>Upload Documents *</label>
+            <div
+              style={{...S.dropzone, ...(dragOver ? S.dropzoneActive : {})}}
+              onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={e => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files); }}
+              onClick={() => fileRef.current.click()}>
+              <input ref={fileRef} type="file" multiple style={{display:"none"}} onChange={e => handleFiles(e.target.files)} />
+              <span style={{fontSize:32}}>{loading ? "⏳" : "📁"}</span>
+              <p style={S.dropzoneText}>{loading ? "Reading files…" : "Drag & drop files here, or "}<span style={S.browseLink}>{loading ? "" : "browse"}</span></p>
+              <p style={S.dropzoneHint}>PDF, JPG, PNG, DOCX accepted</p>
+            </div>
+
+            {staged.length > 0 && (
+              <div style={S.fileList}>
+                {staged.map(f => (
+                  <div key={f.name} style={S.fileChip}>
+                    <span>📄 {f.name}</span>
+                    <span style={S.fileSize}>{fmtSize(f.size)}</span>
+                    <button style={S.removeFile} onClick={() => setStaged(prev => prev.filter(x => x.name !== f.name))}>✕</button>
+                  </div>
                 ))}
               </div>
-              <label style={T.lbl}>Upload Documents *</label>
-              <div style={{...T.dz,...(dragOver?T.dzA:{})}}
-                onDragOver={e=>{e.preventDefault();setDragOver(true);}}
-                onDragLeave={()=>setDragOver(false)}
-                onDrop={e=>{e.preventDefault();setDragOver(false);addFiles(e.dataTransfer.files);}}
-                onClick={()=>fileRef.current.click()}>
-                <input ref={fileRef} type="file" multiple style={{display:"none"}} onChange={e=>addFiles(e.target.files)} />
-                <span style={{fontSize:32}}>📁</span>
-                <p style={T.dzTxt}>Drag &amp; drop files here, or <span style={T.browse}>browse</span></p>
-                <p style={T.dzHint}>PDF, JPG, PNG, DOCX accepted</p>
-              </div>
-              {Object.keys(files).length>0&&(
-                <div style={T.fList}>
-                  {Object.entries(files).map(([name,f])=>(
-                    <div key={name} style={T.fChip}>
-                      <span>📄 {name}</span>
-                      <span style={T.fSz}>{fmtSize(f.size)}</span>
-                      <button style={T.rmFile} onClick={()=>setFiles(prev=>{const n={...prev};delete n[name];return n;})}>✕</button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <label style={T.lbl}>Notes (optional)</label>
-              <textarea style={T.ta} rows={3} placeholder="Any additional context for the licensing office…" value={notes} onChange={e=>setNotes(e.target.value)} />
-              <button style={{...T.subBtn,opacity:uploading?0.7:1}} onClick={handleSubmit} disabled={uploading}>
-                {uploading?"⏳ Uploading to Supabase…":"Submit Documents →"}
-              </button>
-            </div>
+            )}
+
+            <label style={S.label}>Notes (optional)</label>
+            <textarea style={S.textarea} rows={3} placeholder="Any additional context…" value={notes} onChange={e => setNotes(e.target.value)} />
+
+            <button style={{...S.submitBtn, opacity:(loading||saving)?0.6:1}} onClick={handleSubmit} disabled={loading||saving}>
+              {saving ? "Saving…" : "Submit Documents →"}
+            </button>
           </div>
-          {toast&&<div style={{...T.toast_,background:toast.type==="error"?"#c0392b":"#2D6A4F"}}>{toast.type==="error"?"⚠️ ":"✅ "}{toast.msg}</div>}
+        </div>
+      );
+    }
+
+    function AdminView({ showToast }) {
+      const [submissions,  setSubmissions]  = useState([]);
+      const [loading,      setLoading]      = useState(true);
+      const [tab,          setTab]          = useState("submissions");
+      const [filterCenter, setFilterCenter] = useState("all");
+      const [filterType,   setFilterType]   = useState("all");
+
+      useEffect(() => {
+        fetchSubmissions()
+          .then(rows => {
+            const parsed = rows.map(r => ({
+              ...r,
+              files: (() => { try { return typeof r.files === "string" ? JSON.parse(r.files) : (r.files || []); } catch(e) { return []; } })(),
+            }));
+            setSubmissions(parsed);
+          })
+          .catch(e => showToast("Failed to load: " + e.message, true))
+          .finally(() => setLoading(false));
+      }, []);
+
+      const submittedCenters = new Set(submissions.map(s => s.center));
+      const missingCenters   = CENTERS.filter(c => !submittedCenters.has(c));
+
+      const filtered = submissions.filter(s => {
+        if (filterCenter !== "all" && s.center !== filterCenter) return false;
+        if (filterType   !== "all" && s.doc_type !== filterType) return false;
+        return true;
+      });
+
+      const grouped = CENTERS.reduce((acc, c) => {
+        const subs = filtered.filter(s => s.center === c);
+        if (subs.length) acc[c] = subs;
+        return acc;
+      }, {});
+
+      const getDt = (id) => DOC_TYPES.find(d => d.id === id) || { label: id, icon: "📄", color: "#888" };
+
+      const downloadAll = (sub) => {
+        if (!sub.files || sub.files.length === 0) { showToast("No downloadable files.", true); return; }
+        sub.files.forEach(dlFile);
+        showToast("Downloading " + sub.files.length + " file(s)");
+      };
+
+      if (loading) return (
+        <div style={S.emptyState}>
+          <span style={{fontSize:48}}>⏳</span>
+          <p style={{color:"#777"}}>Loading submissions…</p>
         </div>
       );
 
       return (
-        <div style={T.appBg}>
-          <Hdr roleLabel="Admin / Owner View" onSwitch={()=>setRole(null)} />
-          <div style={T.wrap}>
-            <div style={T.adminTop}>
-              <div>
-                <h2 style={T.adminTitle}>Document Submissions</h2>
-                <p style={T.adminSub}>{subs.length} submission{subs.length!==1?"s":""} · {Object.keys(grouped).length} center{Object.keys(grouped).length!==1?"s":""}<span style={{color:"#2D6A4F",fontWeight:700}}> · ☁️ Stored in Supabase</span></p>
-              </div>
-              <div style={T.fRow}>
-                <select style={T.fSel} value={fCenter} onChange={e=>setFCenter(e.target.value)}>
-                  <option value="all">All Centers</option>
-                  {CENTERS.map(c=><option key={c}>{c}</option>)}
-                </select>
-                <select style={T.fSel} value={fType} onChange={e=>setFType(e.target.value)}>
-                  <option value="all">All Doc Types</option>
-                  {DOC_TYPES.map(dt=><option key={dt.id} value={dt.id}>{dt.label}</option>)}
-                </select>
-                <button style={T.refBtn} onClick={loadSubs}>🔄 Refresh</button>
-              </div>
-            </div>
-            {loading?(
-              <div style={T.empty}><span style={{fontSize:36}}>⏳</span><p style={{color:"#777"}}>Loading from Supabase…</p></div>
-            ):subs.length===0?(
-              <div style={T.empty}><span style={{fontSize:48}}>📭</span><p style={{color:"#777"}}>No submissions yet.</p></div>
-            ):filtered.length===0?(
-              <div style={T.empty}><span style={{fontSize:48}}>🔍</span><p style={{color:"#777"}}>No submissions match your filters.</p></div>
-            ):(
-              Object.entries(grouped).map(([c,items])=>(
-                <div key={c} style={T.cGroup}>
-                  <div style={T.cHdr}>
-                    <span style={T.cIcon}>🏫</span>
-                    <span style={T.cName}>{c}</span>
-                    <span style={T.cCount}>{items.length} submission{items.length!==1?"s":""}</span>
-                  </div>
-                  {items.map(sub=>{
-                    const dt=DOC_TYPES.find(d=>d.id===sub.doc_type);
-                    return (
-                      <div key={sub.id} style={T.sRow}>
-                        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:8,marginBottom:8}}>
-                          <div style={{...T.badge,background:(dt?dt.color:"#888")+"18",color:dt?dt.color:"#888"}}>{dt?dt.icon:"📄"} {dt?dt.label:sub.doc_type}</div>
-                          <button style={T.delBtn} onClick={()=>delSub(sub.id)}>🗑 Delete</button>
-                        </div>
-                        <div style={T.meta}>
-                          <span style={T.metaDate}>Submitted {fmtDate(sub.submitted_at)}</span>
-                          {sub.notes&&<span style={T.metaNotes}>"{sub.notes}"</span>}
-                        </div>
-                        <div style={T.fileRow}>
-                          {(sub.files||[]).map(f=>(
-                            <button key={f.name} style={T.fileBtn} onClick={()=>dlFile(f)}>
-                              📄 {f.name} <span style={T.fSz}>{fmtSize(f.size)}</span> ⬇
-                            </button>
-                          ))}
-                        </div>
-                        {(sub.files||[]).length>1&&(
-                          <button style={T.dlBtn} onClick={()=>dlAll(sub)}>⬇ Download All ({sub.files.length})</button>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))
-            )}
+        <div style={S.container}>
+          <div style={S.tabRow}>
+            <button style={{...S.tab, ...(tab==="submissions" ? S.tabActive : {})}} onClick={() => setTab("submissions")}>
+              📋 Submissions {submissions.length > 0 && <span style={S.tabBadge}>{submissions.length}</span>}
+            </button>
+            <button style={{...S.tab, ...(tab==="missing" ? S.tabActive : {})}} onClick={() => setTab("missing")}>
+              ⚠️ No Uploads Yet <span style={{...S.tabBadge, background: missingCenters.length > 0 ? "#c0392b" : "#2D6A4F"}}>{missingCenters.length}</span>
+            </button>
           </div>
-          {toast&&<div style={{...T.toast_,background:toast.type==="error"?"#c0392b":"#2D6A4F"}}>{toast.type==="error"?"⚠️ ":"✅ "}{toast.msg}</div>}
+
+          {tab === "missing" && (
+            <div style={S.card}>
+              <h2 style={{...S.cardTitle, marginBottom:6}}>Centers With No Uploads</h2>
+              <p style={{color:"#777", fontSize:13, marginBottom:20}}>{missingCenters.length} of {CENTERS.length} centers have not submitted any documents.</p>
+              {missingCenters.length === 0 ? (
+                <div style={S.emptyState}>
+                  <span style={{fontSize:48}}>🎉</span>
+                  <p style={{color:"#2D6A4F", fontWeight:700}}>All centers have submitted!</p>
+                </div>
+              ) : (
+                <div style={{display:"flex", flexDirection:"column", gap:8}}>
+                  {missingCenters.map(c => (
+                    <div key={c} style={S.missingRow}>
+                      <span style={{fontSize:16}}>🏫</span>
+                      <span style={{flex:1, fontSize:14, color:"#333"}}>{c}</span>
+                      <span style={S.missingBadge}>No uploads</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === "submissions" && (
+            <div>
+              <div style={S.adminTopRow}>
+                <div>
+                  <h2 style={S.adminTitle}>Document Submissions</h2>
+                  <p style={S.adminSub}>{submissions.length} total · {Object.keys(grouped).length} center{Object.keys(grouped).length !== 1 ? "s" : ""} with submissions</p>
+                </div>
+                <div style={S.filterRow}>
+                  <select style={S.filterSelect} value={filterCenter} onChange={e => setFilterCenter(e.target.value)}>
+                    <option value="all">All Centers</option>
+                    {CENTERS.map(c => <option key={c}>{c}</option>)}
+                  </select>
+                  <select style={S.filterSelect} value={filterType} onChange={e => setFilterType(e.target.value)}>
+                    <option value="all">All Doc Types</option>
+                    {DOC_TYPES.map(dt => <option key={dt.id} value={dt.id}>{dt.label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              {submissions.length === 0 ? (
+                <div style={S.emptyState}><span style={{fontSize:48}}>📭</span><p style={{color:"#777"}}>No submissions yet.</p></div>
+              ) : filtered.length === 0 ? (
+                <div style={S.emptyState}><span style={{fontSize:48}}>🔍</span><p style={{color:"#777"}}>No submissions match your filters.</p></div>
+              ) : (
+                Object.entries(grouped).map(([center, subs]) => (
+                  <div key={center} style={S.centerGroup}>
+                    <div style={S.centerGroupHeader}>
+                      <span style={{fontSize:20}}>🏫</span>
+                      <span style={S.centerName}>{center}</span>
+                      <span style={S.centerCount}>{subs.length} submission{subs.length !== 1 ? "s" : ""}</span>
+                    </div>
+                    {subs.map(sub => {
+                      const dt = getDt(sub.doc_type);
+                      return (
+                        <div key={sub.id} style={S.submissionRow}>
+                          <div style={{...S.docTypeBadge, background:dt.color+"18", color:dt.color}}>
+                            {dt.icon} {dt.label}
+                          </div>
+                          <div style={S.subMeta}>
+                            <span style={S.subDate}>{fmtDate(sub.submitted_at)}</span>
+                            {sub.notes && <span style={S.subNotes}>"{sub.notes}"</span>}
+                          </div>
+                          {sub.files && sub.files.length > 0 ? (
+                            <div style={S.fileListAdmin}>
+                              {sub.files.map((f,i) => (
+                                <div key={i} style={S.adminFileChip}>
+                                  📄 {f.name} {f.size ? <span style={S.fileSize}>{fmtSize(f.size)}</span> : null}
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p style={{fontSize:12, color:"#aaa", margin:"4px 0 10px"}}>No files attached.</p>
+                          )}
+                          {sub.files && sub.files.length > 0 && (
+                            <button style={S.downloadBtn} onClick={() => downloadAll(sub)}>
+                              ⬇ Download All ({sub.files.length})
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
+    function AdminLogin({ onUnlock }) {
+      const [pw,  setPw]  = useState("");
+      const [err, setErr] = useState(false);
+      const attempt = () => {
+        if (pw === ADMIN_PASSWORD) { onUnlock(); }
+        else { setErr(true); setPw(""); }
+      };
+      return (
+        <div style={S.container}>
+          <div style={{...S.card, maxWidth:400, margin:"0 auto"}}>
+            <div style={{textAlign:"center", marginBottom:24}}>
+              <span style={{fontSize:40}}>🔒</span>
+              <h2 style={{...S.cardTitle, marginBottom:4}}>Admin Access</h2>
+              <p style={{color:"#777", fontSize:13, margin:0}}>Enter the admin password to continue</p>
+            </div>
+            <label style={S.label}>Password</label>
+            <input
+              type="password"
+              style={{...S.select, marginBottom:8, borderColor: err ? "#c0392b" : "#d0e8d8"}}
+              placeholder="Enter password…"
+              value={pw}
+              onChange={e => { setPw(e.target.value); setErr(false); }}
+              onKeyDown={e => e.key === "Enter" && attempt()}
+            />
+            {err && <p style={{color:"#c0392b", fontSize:12, margin:"0 0 12px"}}>⚠️ Incorrect password. Please try again.</p>}
+            <button style={S.submitBtn} onClick={attempt}>Unlock Admin →</button>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [screen, setScreen] = useState("none");
+      const [toast,  setToast]  = useState(null);
+
+      const showToast = (msg, err=false) => {
+        setToast({msg, err});
+        setTimeout(() => setToast(null), 3200);
+      };
+
+      if (screen === "none") return (
+        <div style={S.loginBg}>
+          <div style={S.loginCard}>
+            <div style={S.logoRow}>
+              <img src="kah-logo.png" alt="KAH Logo" style={{height:80, objectFit:"contain"}} />
+              <div>
+                <div style={S.logoTitle}>Maryland Childcare</div>
+                <div style={S.logoSub}>Licensing Document Portal</div>
+              </div>
+            </div>
+            <p style={{color:"#555", marginBottom:28, fontSize:15}}>Select your role to continue</p>
+            <div style={S.roleGrid}>
+              <button style={S.roleBtn} onClick={() => setScreen("director")}>
+                <span style={{fontSize:32}}>🏫</span>
+                <span style={{fontSize:13, fontWeight:700, color:"#2D6A4F"}}>Center Director</span>
+              </button>
+              <button style={S.roleBtn} onClick={() => setScreen("adminLock")}>
+                <span style={{fontSize:32}}>🗂️</span>
+                <span style={{fontSize:13, fontWeight:700, color:"#2D6A4F"}}>Admin / Owner</span>
+              </button>
+            </div>
+          </div>
+          {toast && <Toast toast={toast} />}
+        </div>
+      );
+
+      if (screen === "director") return (
+        <div style={S.appBg}>
+          <Header role="director" onSwitch={() => setScreen("none")} />
+          <DirectorView showToast={showToast} />
+          {toast && <Toast toast={toast} />}
+        </div>
+      );
+
+      if (screen === "adminLock") return (
+        <div style={S.appBg}>
+          <Header role="admin" onSwitch={() => setScreen("none")} />
+          <AdminLogin onUnlock={() => setScreen("adminOpen")} />
+          {toast && <Toast toast={toast} />}
+        </div>
+      );
+
+      if (screen === "adminOpen") return (
+        <div style={S.appBg}>
+          <Header role="admin" onSwitch={() => setScreen("none")} />
+          <AdminView showToast={showToast} />
+          {toast && <Toast toast={toast} />}
+        </div>
+      );
+
+      return null;
+    }
+
+    const S = {
+      loginBg:{minHeight:"100vh",background:"linear-gradient(135deg,#e8f5e9,#e3f0fb)",display:"flex",alignItems:"center",justifyContent:"center"},
+      loginCard:{background:"#fff",borderRadius:20,padding:"48px 44px",boxShadow:"0 8px 48px rgba(0,0,0,.10)",maxWidth:420,width:"100%",textAlign:"center"},
+      logoRow:{display:"flex",alignItems:"center",gap:14,marginBottom:20,justifyContent:"center"},
+      logoTitle:{fontSize:20,fontWeight:800,color:"#1a3a2a",textAlign:"left"},
+      logoSub:{fontSize:12,color:"#5a7a6a",textAlign:"left",letterSpacing:.5},
+      roleGrid:{display:"flex",gap:14,justifyContent:"center"},
+      roleBtn:{flex:1,background:"#f4f9f6",border:"2px solid #c8e6c9",borderRadius:14,padding:"20px 14px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:10},
+      appBg:{minHeight:"100vh",background:"#f6f8f6"},
+      header:{background:"#fff",borderBottom:"1px solid #e0ebe4",padding:"16px 32px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100},
+      headerLeft:{display:"flex",alignItems:"center",gap:12},
+      headerTitle:{fontSize:16,fontWeight:800,color:"#1a3a2a"},
+      headerRole:{fontSize:11,color:"#5a7a6a",letterSpacing:.5},
+      switchBtn:{fontSize:12,background:"#eef6ee",border:"1px solid #b2d8b2",borderRadius:8,padding:"7px 14px",cursor:"pointer",color:"#2D6A4F",fontWeight:600},
+      container:{maxWidth:820,margin:"0 auto",padding:"36px 20px"},
+      card:{background:"#fff",borderRadius:18,padding:"36px",boxShadow:"0 2px 20px rgba(0,0,0,.06)"},
+      cardTitle:{fontSize:22,fontWeight:800,color:"#1a3a2a",marginBottom:24},
+      label:{display:"block",fontSize:12,fontWeight:700,color:"#3a5a4a",marginBottom:6,marginTop:18,textTransform:"uppercase",letterSpacing:.8},
+      select:{width:"100%",padding:"10px 14px",border:"1.5px solid #d0e8d8",borderRadius:10,fontSize:14,color:"#222",background:"#fafffe",outline:"none",boxSizing:"border-box"},
+      docTypeGrid:{display:"flex",gap:12,marginTop:4,flexWrap:"wrap"},
+      docTypeBtn:{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:8,border:"2px solid #e0e8e4",borderRadius:12,padding:"14px 8px",cursor:"pointer",background:"#fff"},
+      dropzone:{marginTop:4,border:"2px dashed #b2d8b2",borderRadius:14,padding:"32px 20px",textAlign:"center",cursor:"pointer",background:"#f6fdf7"},
+      dropzoneActive:{borderColor:"#2D6A4F",background:"#e8f5ee"},
+      dropzoneText:{margin:"8px 0 4px",color:"#444",fontSize:14},
+      dropzoneHint:{color:"#888",fontSize:12,margin:0},
+      browseLink:{color:"#2D6A4F",fontWeight:700,textDecoration:"underline"},
+      fileList:{marginTop:10,display:"flex",flexDirection:"column",gap:6},
+      fileChip:{display:"flex",alignItems:"center",gap:8,background:"#f0faf2",border:"1px solid #b2d8b2",borderRadius:8,padding:"7px 12px",fontSize:13},
+      fileSize:{color:"#888",fontSize:11,marginLeft:"auto"},
+      removeFile:{background:"none",border:"none",color:"#c0392b",cursor:"pointer",fontSize:14,marginLeft:4},
+      textarea:{width:"100%",border:"1.5px solid #d0e8d8",borderRadius:10,padding:"10px 14px",fontSize:14,color:"#333",resize:"vertical",background:"#fafffe",boxSizing:"border-box"},
+      submitBtn:{marginTop:28,width:"100%",background:"#2D6A4F",color:"#fff",border:"none",borderRadius:12,padding:"15px 0",fontSize:16,fontWeight:800,cursor:"pointer"},
+      successBanner:{background:"#e8f5ee",border:"1px solid #b2d8b2",borderRadius:10,padding:"12px 18px",marginBottom:20,color:"#2D6A4F",fontWeight:600,fontSize:14,display:"flex",alignItems:"center",justifyContent:"space-between"},
+      dismissBtn:{background:"none",border:"none",color:"#2D6A4F",cursor:"pointer",fontSize:12,fontWeight:600},
+      tabRow:{display:"flex",gap:8,marginBottom:20},
+      tab:{padding:"9px 18px",border:"2px solid #d0e8d8",borderRadius:10,background:"#fff",cursor:"pointer",fontSize:13,fontWeight:600,color:"#555",display:"flex",alignItems:"center",gap:6},
+      tabActive:{borderColor:"#2D6A4F",background:"#f0faf2",color:"#2D6A4F"},
+      tabBadge:{background:"#2D6A4F",color:"#fff",borderRadius:20,padding:"1px 7px",fontSize:11,fontWeight:700},
+      missingRow:{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"#fff9f9",border:"1px solid #f5c6c6",borderRadius:10},
+      missingBadge:{fontSize:11,fontWeight:700,color:"#c0392b",background:"#fdecea",borderRadius:20,padding:"3px 10px"},
+      adminTopRow:{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,flexWrap:"wrap",gap:14},
+      adminTitle:{fontSize:24,fontWeight:800,color:"#1a3a2a",margin:0},
+      adminSub:{color:"#5a7a6a",fontSize:13,marginTop:4},
+      filterRow:{display:"flex",gap:10,flexWrap:"wrap"},
+      filterSelect:{padding:"8px 12px",border:"1.5px solid #d0e8d8",borderRadius:8,fontSize:13,background:"#fff",color:"#333"},
+      centerGroup:{background:"#fff",borderRadius:16,marginBottom:20,boxShadow:"0 2px 12px rgba(0,0,0,.05)",overflow:"hidden"},
+      centerGroupHeader:{display:"flex",alignItems:"center",gap:10,padding:"16px 22px",background:"#f0faf2",borderBottom:"1px solid #dff0e4"},
+      centerName:{fontWeight:800,color:"#1a3a2a",fontSize:15,flex:1},
+      centerCount:{fontSize:11,color:"#5a7a6a",background:"#d4edda",borderRadius:20,padding:"3px 10px",fontWeight:700},
+      submissionRow:{padding:"18px 22px",borderBottom:"1px solid #f0f4f0"},
+      docTypeBadge:{display:"inline-flex",alignItems:"center",gap:6,borderRadius:20,padding:"4px 12px",fontSize:12,fontWeight:700,marginBottom:8},
+      subMeta:{display:"flex",gap:14,flexWrap:"wrap",marginBottom:8},
+      subDate:{fontSize:12,color:"#777"},
+      subNotes:{fontSize:12,color:"#444",fontStyle:"italic"},
+      fileListAdmin:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:12},
+      adminFileChip:{fontSize:12,background:"#f6f8f6",border:"1px solid #dde8dd",borderRadius:6,padding:"4px 10px",color:"#333"},
+      downloadBtn:{background:"#1D3557",color:"#fff",border:"none",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"},
+      emptyState:{textAlign:"center",padding:"60px 20px",display:"flex",flexDirection:"column",alignItems:"center",gap:14},
+      toast:{position:"fixed",bottom:24,right:24,color:"#fff",padding:"13px 22px",borderRadius:10,fontWeight:600,fontSize:14,boxShadow:"0 4px 20px rgba(0,0,0,.18)",zIndex:999},
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
 </html>
