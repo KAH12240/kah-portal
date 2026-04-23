@@ -21,6 +21,7 @@
     const SUPABASE_KEY = "sb_publishable_6gAsF5-FGs3SiEx-V2WL6Q_nenqNO5q";
     const TABLE = "submissions";
     const ADMIN_PASSWORD = "KAH12345";
+    const LOGO_URL = "https://kah12240.github.io/kah-fleet/kah-logo.png";
 
     const CENTERS = [
       "KAH @ Barnsley Elementary","KAH @ Bayard Rustin Elementary","KAH @ Burtonsville Elementary",
@@ -54,14 +55,6 @@
       return res.json();
     }
 
-    async function deleteSubmission(id) {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${id}`, {
-        method: "DELETE",
-        headers: hdrs,
-      });
-      if (!res.ok) throw new Error("Failed to delete submission");
-    }
-
     async function insertSubmission(row) {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: "POST",
@@ -70,6 +63,14 @@
       });
       if (!res.ok) throw new Error("Failed to save submission");
       return res.json();
+    }
+
+    async function deleteSubmission(id) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${id}`, {
+        method: "DELETE",
+        headers: hdrs,
+      });
+      if (!res.ok) throw new Error("Failed to delete submission");
     }
 
     function fmtSize(b) {
@@ -93,11 +94,6 @@
       });
     }
 
-    function dlFile(f) {
-      const a = document.createElement("a");
-      a.href = f.dataUrl; a.download = f.name; a.click();
-    }
-
     function Toast({ toast }) {
       return (
         <div style={{...S.toast, background: toast.err ? "#c0392b" : "#2D6A4F"}}>
@@ -107,11 +103,10 @@
     }
 
     function Header({ role, onSwitch }) {
-      const logoUrl = "https://kah12240.github.io/kah-fleet/kah-logo.png";
       return (
         <div style={S.header}>
           <div style={S.headerLeft}>
-            <img src={logoUrl} alt="KAH" style={{height:46, objectFit:"contain"}} />
+            <img src={LOGO_URL} alt="KAH" style={{height:46, objectFit:"contain"}} />
             <div>
               <div style={S.headerTitle}>Maryland Childcare Licensing Portal</div>
               <div style={S.headerRole}>{role === "director" ? "Director Submission View" : "Admin / Owner View"}</div>
@@ -241,19 +236,38 @@
       const [tab,          setTab]          = useState("submissions");
       const [filterCenter, setFilterCenter] = useState("all");
       const [filterType,   setFilterType]   = useState("all");
+      const [confirmDelete, setConfirmDelete] = useState(null);
 
       useEffect(() => {
         fetchSubmissions()
           .then(rows => {
             const parsed = rows.map(r => ({
               ...r,
-              files: (() => { try { return typeof r.files === "string" ? JSON.parse(r.files) : (r.files || []); } catch(e) { return []; } })(),
+              files: (() => {
+                try {
+                  if (!r.files) return [];
+                  if (typeof r.files === "string") return JSON.parse(r.files);
+                  if (Array.isArray(r.files)) return r.files;
+                  return [];
+                } catch(e) { return []; }
+              })(),
             }));
             setSubmissions(parsed);
           })
           .catch(e => showToast("Failed to load: " + e.message, true))
           .finally(() => setLoading(false));
       }, []);
+
+      const handleDelete = async (id) => {
+        try {
+          await deleteSubmission(id);
+          setSubmissions(prev => prev.filter(s => s.id !== id));
+          setConfirmDelete(null);
+          showToast("Submission deleted.");
+        } catch(e) {
+          showToast("Delete failed: " + e.message, true);
+        }
+      };
 
       const submittedCenters = new Set(submissions.map(s => s.center));
       const missingCenters   = CENTERS.filter(c => !submittedCenters.has(c));
@@ -270,18 +284,7 @@
         return acc;
       }, {});
 
-      const [confirmDelete, setConfirmDelete] = useState(null); // holds submission id to confirm
-
-      const handleDelete = async (id) => {
-        try {
-          await deleteSubmission(id);
-          setSubmissions(prev => prev.filter(s => s.id !== id));
-          setConfirmDelete(null);
-          showToast("Submission deleted.");
-        } catch(e) {
-          showToast("Delete failed: " + e.message, true);
-        }
-      };
+      const getDt = (id) => DOC_TYPES.find(d => d.id === id) || { label: id, icon: "📄", color: "#888" };
 
       const downloadAll = (sub) => {
         if (!sub.files || sub.files.length === 0) { showToast("No downloadable files.", true); return; }
@@ -306,7 +309,7 @@
         <div style={S.container}>
           <div style={S.tabRow}>
             <button style={{...S.tab, ...(tab==="submissions" ? S.tabActive : {})}} onClick={() => setTab("submissions")}>
-              📋 Submissions {submissions.length > 0 && <span style={S.tabBadge}>{submissions.length}</span>}
+              📋 Submissions <span style={S.tabBadge}>{submissions.length}</span>
             </button>
             <button style={{...S.tab, ...(tab==="missing" ? S.tabActive : {})}} onClick={() => setTab("missing")}>
               ⚠️ No Uploads Yet <span style={{...S.tabBadge, background: missingCenters.length > 0 ? "#c0392b" : "#2D6A4F"}}>{missingCenters.length}</span>
@@ -382,28 +385,28 @@
                             <div style={S.fileListAdmin}>
                               {sub.files.map((f,i) => (
                                 <div key={i} style={S.adminFileChip}>
-                                  📄 {f.name} {f.size ? <span style={S.fileSize}>{fmtSize(f.size)}</span> : null}
+                                  📄 {f.name || f} {f.size ? <span style={S.fileSize}>{fmtSize(f.size)}</span> : null}
                                 </div>
                               ))}
                             </div>
                           ) : (
                             <p style={{fontSize:12, color:"#aaa", margin:"4px 0 10px"}}>No files attached.</p>
                           )}
-                          <div style={{display:"flex", gap:8, marginTop:8, flexWrap:"wrap"}}>
-                          {sub.files && sub.files.length > 0 && (
-                            <button style={S.downloadBtn} onClick={() => downloadAll(sub)}>
-                              ⬇ Download All ({sub.files.length})
-                            </button>
-                          )}
-                          {confirmDelete === sub.id ? (
-                            <div style={S.confirmRow}>
-                              <span style={{fontSize:13, color:"#c0392b", fontWeight:600}}>Delete this submission?</span>
-                              <button style={S.confirmYes} onClick={() => handleDelete(sub.id)}>Yes, delete</button>
-                              <button style={S.confirmNo} onClick={() => setConfirmDelete(null)}>Cancel</button>
-                            </div>
-                          ) : (
-                            <button style={S.deleteBtn} onClick={() => setConfirmDelete(sub.id)}>🗑 Delete</button>
-                          )}
+                          <div style={{display:"flex", gap:8, flexWrap:"wrap", alignItems:"center"}}>
+                            {sub.files && sub.files.length > 0 && (
+                              <button style={S.downloadBtn} onClick={() => downloadAll(sub)}>
+                                ⬇ Download All ({sub.files.length})
+                              </button>
+                            )}
+                            {confirmDelete === sub.id ? (
+                              <div style={S.confirmRow}>
+                                <span style={{fontSize:13, color:"#c0392b", fontWeight:600}}>Are you sure?</span>
+                                <button style={S.confirmYes} onClick={() => handleDelete(sub.id)}>Yes, delete</button>
+                                <button style={S.confirmNo} onClick={() => setConfirmDelete(null)}>Cancel</button>
+                              </div>
+                            ) : (
+                              <button style={S.deleteBtn} onClick={() => setConfirmDelete(sub.id)}>🗑 Delete</button>
+                            )}
                           </div>
                         </div>
                       );
@@ -461,9 +464,9 @@
         <div style={S.loginBg}>
           <div style={S.loginCard}>
             <div style={S.logoRow}>
-              <img src="https://kah12240.github.io/kah-fleet/kah-logo.png" alt="KAH Logo" style={{height:80, objectFit:"contain"}} />
+              <img src={LOGO_URL} alt="KAH Logo" style={{height:80, objectFit:"contain"}} />
               <div>
-                <div style={S.logoTitle}>Maryland Childcare</div>
+                <div style={S.logoTitle}>Kids After Hours</div>
                 <div style={S.logoSub}>Licensing Document Portal</div>
               </div>
             </div>
@@ -567,8 +570,8 @@
       fileListAdmin:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:12},
       adminFileChip:{fontSize:12,background:"#f6f8f6",border:"1px solid #dde8dd",borderRadius:6,padding:"4px 10px",color:"#333"},
       downloadBtn:{background:"#1D3557",color:"#fff",border:"none",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"},
-      deleteBtn:{background:"#fff",color:"#c0392b",border:"1.5px solid #c0392b",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer",marginLeft:8},
-      confirmRow:{display:"flex",alignItems:"center",gap:10,marginTop:8,flexWrap:"wrap"},
+      deleteBtn:{background:"#fff",color:"#c0392b",border:"1.5px solid #c0392b",borderRadius:8,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"},
+      confirmRow:{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"},
       confirmYes:{background:"#c0392b",color:"#fff",border:"none",borderRadius:8,padding:"7px 14px",fontSize:12,fontWeight:700,cursor:"pointer"},
       confirmNo:{background:"#eee",color:"#333",border:"none",borderRadius:8,padding:"7px 14px",fontSize:12,fontWeight:700,cursor:"pointer"},
       emptyState:{textAlign:"center",padding:"60px 20px",display:"flex",flexDirection:"column",alignItems:"center",gap:14},
