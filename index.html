@@ -51,8 +51,9 @@
 
     // Upload a file to Supabase Storage, return its public URL
     async function uploadFile(file, submissionId) {
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const path = `${submissionId}/${Date.now()}_${safeName}`;
+      const ext = file.name.split(".").pop().toLowerCase();
+      const safeName = Date.now() + "." + ext;
+      const path = submissionId + "/" + safeName;
       const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
         method: "POST",
         headers: { ...hdrs, "Content-Type": file.type || "application/octet-stream" },
