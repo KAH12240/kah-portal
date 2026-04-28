@@ -51,7 +51,7 @@
     };
 
     async function fetchSubmissions() {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?select=*&order=submitted_at.desc`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?select=*`, {
         method: "GET",
         headers: hdrs,
       });
